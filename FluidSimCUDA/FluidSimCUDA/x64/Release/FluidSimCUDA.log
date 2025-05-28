@@ -1,0 +1,34 @@
+﻿  Compiling CUDA source file kernel.cu...
+  
+  C:\Users\Georg\source\repos\FluidSimCUDA\FluidSimCUDA>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.9\bin\nvcc.exe" -gencode=arch=compute_52,code=\"sm_52,compute_52\" --use-local-env -ccbin "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\bin\HostX64\x64" -x cu   -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.9\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.9\include"     --keep-dir x64\Release  -maxrregcount=0    --machine 64 --compile -cudart static    -DWIN32 -DWIN64 -DNDEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /O2 /FS   /MD " -Xcompiler "/Fdx64\Release\vc143.pdb" -o C:\Users\Georg\source\repos\FluidSimCUDA\FluidSimCUDA\x64\Release\kernel.cu.obj "C:\Users\Georg\source\repos\FluidSimCUDA\FluidSimCUDA\kernel.cu" 
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\minwindef.h(130): warning C4005: "APIENTRY": Makro-Neudefinition
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\minwindef.h(130): warning C4005: "APIENTRY": Makro-Neudefinition
+C:\Users\Georg\source\repos\FluidSimCUDA\FluidSimCUDA\kernel.cu(107): warning #177-D: variable "interpolatedValue" was declared but never referenced
+        double particleX = 0, particleY = 0, particleX_INT = 0, particleY_INT = 0, particleX_FRACT = 0, particleY_FRACT = 0, lerpX1 = 0, lerpX2 = 0, interpolatedValue = 0;
+                                                                                                                                                     ^
+  
+  Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+  
+C:\Users\Georg\source\repos\FluidSimCUDA\FluidSimCUDA\kernel.cu(210): warning #177-D: variable "i" was declared but never referenced
+        int i = blockIdx.x * blockDim.x + threadIdx.x + 1;
+            ^
+  
+C:\Users\Georg\source\repos\FluidSimCUDA\FluidSimCUDA\kernel.cu(211): warning #177-D: variable "j" was declared but never referenced
+        int j = blockIdx.y * blockDim.y + threadIdx.y + 1;
+            ^
+  
+C:\Users\Georg\source\repos\FluidSimCUDA\FluidSimCUDA\kernel.cu(287): warning #177-D: variable "p" was declared but never referenced
+        double *u = nullptr, *u_prev = nullptr, *v = nullptr, *v_prev = nullptr, *dens = nullptr, *dens_prev = nullptr, *p = nullptr, *div = nullptr;
+                                                                                                                         ^
+  
+C:\Users\Georg\source\repos\FluidSimCUDA\FluidSimCUDA\kernel.cu(287): warning #177-D: variable "div" was declared but never referenced
+        double *u = nullptr, *u_prev = nullptr, *v = nullptr, *v_prev = nullptr, *dens = nullptr, *dens_prev = nullptr, *p = nullptr, *div = nullptr;
+                                                                                                                                       ^
+  
+CUDACOMPILE : nvcc warning : Support for offline compilation for architectures prior to '<compute/sm/lto>_75' will be removed in a future release (Use -Wno-deprecated-gpu-targets to suppress warning).
+  kernel.cu
+  tmpxft_00002ee8_00000000-7_kernel.cudafe1.cpp
+     Bibliothek "C:\Users\Georg\source\repos\FluidSimCUDA\x64\Release\FluidSimCUDA.lib" und Objekt "C:\Users\Georg\source\repos\FluidSimCUDA\x64\Release\FluidSimCUDA.exp" werden erstellt.
+LINK : warning LNK4098: Standardbibliothek "LIBCMT" steht in Konflikt mit anderen Bibliotheken; /NODEFAULTLIB:Bibliothek verwenden.
+  LINK : /LTCG wurde angegeben, es ist jedoch keine Codegenerierung erforderlich. Entfernen Sie /LTCG aus der Linkbefehlszeile, um die Linkerleistung zu erhöhen.
+  FluidSimCUDA.vcxproj -> C:\Users\Georg\source\repos\FluidSimCUDA\x64\Release\FluidSimCUDA.exe
