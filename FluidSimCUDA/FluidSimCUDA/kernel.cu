@@ -1,4 +1,4 @@
-﻿//CPU Code taken from: https://graphics.cs.cmu.edu/nsp/course/15-464/Fall09/papers/StamFluidforGames.pdf
+//CPU Code taken from: https://graphics.cs.cmu.edu/nsp/course/15-464/Fall09/papers/StamFluidforGames.pdf
 //Credit to Jos Stam
 
 #include "cuda_runtime.h"
@@ -231,23 +231,35 @@ void simulate(int N, int width, double gridSize, double dt, double* dens, double
     cudaSetDevice(0);
 
     int frames = 0;
+    double avg[30] = {0};
+    int it = 0;
     time_t start = time(0);
+    time_t prev = time(0);
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window)) {
-        if (benchmark && time(0) - start < 10) return;
+        if (benchmark && time(0) - prev >= 1) {
+            printf("time(0)-start: %f\n", difftime(time(0), start));
+            printf("time(0)-prev: %f\n", difftime(time(0), prev));
+            printf("Cells/s: %d\n", frames * (N*N));
+            avg[it++] = (frames*(N*N)) / (difftime(time(0), prev));
+            printf("Avg[%d]: %f\n", it-1, avg[it-1]);
+            frames = 0;
+            prev = time(0);
+        }
+        if (benchmark && time(0) - start >= 30) break;
         glClear(GL_COLOR_BUFFER_BIT);
 
         //Add sources here ---------------------------------------------------------
         //i = x-coordinate, j = y-coordinate, u_prev = x-velocity, v_prev = y-velocity
         //make sure they are within (1,1) and (N,N) since there is an additional boundary layer
-        int i = 4;
-        int j = 100;
+        int i = 200;
+        int j = 255;
         u_prev[IX(i, j)] = 0.5;
         dens_prev[IX(i, j)] = 5;
         v_prev[IX(i, j)] = 0;
 
-        i = 196;
-        j = 100;
+        i = 300;
+        j = 255;
         u_prev[IX(i, j)] = -0.5;
         dens_prev[IX(i, j)] = 5;
         v_prev[IX(i, j)] = 0;
@@ -267,16 +279,21 @@ void simulate(int N, int width, double gridSize, double dt, double* dens, double
     }
 
     time_t end = time(0);
-    printf("Avg FPS: %f\nFrames: %d\nSeconds: %f\n", frames/difftime(end, start), frames, difftime(end, start));
+    double total_avg = 0;
+    for (int i = 0; i < it; i++) {
+        total_avg += avg[i];
+    }
+    printf("Avg Cells/s: %f\nTotal_Avg: %f\nSeconds: %f\n", total_avg/(double)it, total_avg, difftime(end, start));
+    fflush(stdout);
 }
 
 int main() {
     GLFWwindow* window;
-    int width = 800;
-    int height = 800;
+    int width = 1440;
+    int height = 1440;
 
     //Change N here (N must be a multiple of 32!)-----------------------------
-    const int N = 544;
+    const int N = 12288;
     //------------------------------------------------------------------------
 
     dim3 dimGrid(N/32, N/32);
@@ -301,7 +318,7 @@ int main() {
     cudaMallocManaged(&dens_prev, totalAmountOfCells * sizeof(double));
 
     initializeWindow(window, width, height, "ouroborous 41-100%");
-    simulate(N, width, gridSize, dt, dens, dens_prev, u, u_prev, v, v_prev, 0.000000002299, 6, window, dimBlock, dimGrid, false);
+    simulate(N, width, gridSize, dt, dens, dens_prev, u, u_prev, v, v_prev, 0.000000002299, 6, window, dimBlock, dimGrid, true);
     glfwTerminate();
 
     cudaFree(u);
